@@ -3,9 +3,9 @@ clc;clear;close all
 format long e;
 %% 系数矩阵f 右端项b
 % test: 
-num_matrix = 50;
-% [A,b] = set_equation(num_matrix);
-[A, b] = set_rand_equation(num_matrix);
+num_matrix = 100;
+[A, b] = set_equation(num_matrix);
+% [A, b] = set_rand_equation(num_matrix);
 [X, C1, C2, Cinf] = cal_cond(A, b)
 X = ones(num_matrix,1);
 
