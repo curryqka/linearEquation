@@ -1,5 +1,5 @@
 classdef itermodel
-    %ITERMODEL 迭代法的类
+    %ITERMODEL 迭代法的�?
     %   面向解决Hilbert矩阵的类
     
     properties
@@ -18,20 +18,20 @@ classdef itermodel
     
     methods
         function obj = itermodel(n)
-            %ITERMODEL 构造此类的实例
-            % 构造初始化Hilbert矩阵
+            %ITERMODEL 构�?�此类的实例
+            % 构�?�初始化Hilbert矩阵
             % Args: n dimension of the matrix
             obj.H = zeros(n);
             obj.x = ones(n,1);
             obj.b = ones(n,1);
             obj.n = n;
-            obj.X = ones(n,1); % 精确解
+            obj.X = ones(n,1); % 精确�?
             for i = 1:obj.n
                 for j = 1:obj.n
                     obj.H(i, j) = 1/(i + j - 1);
                 end
             end
-            % 构造对角矩阵,下三角矩阵和上三角矩阵
+            % 构�?�对角矩�?,下三角矩阵和上三角矩�?
             obj.D = diag(diag((obj.H)));
             obj.L = -tril(obj.H, -1);
             obj.U = -triu(obj.H, 1);
@@ -44,7 +44,7 @@ classdef itermodel
         function obj = set_matrix(obj, x_)
             %set_matrix 
             % fill the Hilbert
-            % Args: x_ 给定解
+            % Args: x_ 给定�?
             if nargin > 1
                 obj.b = obj.H * x_;
             else
@@ -81,26 +81,26 @@ classdef itermodel
 
         function [L, U] = get_LU_check(obj)
             %   lu decompose
-            %   L:下三角矩阵
-            %	U:上三角矩阵
+            %   L:下三角矩�?
+            %	U:上三角矩�?
             %	A:输入矩阵
             
             A = obj.H;
             L=eye(obj.n);
-            L(:,1)=A(:,1)/A(1,1);%L第一列赋值
+            L(:,1)=A(:,1)/A(1,1);%L第一列赋�?
             
             U=zeros(obj.n);
-            U(1,:)=A(1,:);%U第一行赋值
+            U(1,:)=A(1,:);%U第一行赋�?
             
             for i=2:obj.n
                 for j=2:obj.n
                     if i<=j
-                        U(i,j)=A(i,j)-sum(L(i,1:i-1).*U(1:i-1,j)');%递推表达式(1-6)
+                        U(i,j)=A(i,j)-sum(L(i,1:i-1).*U(1:i-1,j)');%递推表达�?(1-6)
                     else
                         if U(j,j)==0
                             L(i,j)=0;
                         else
-                            L(i,j)=(A(i,j)-sum(L(i,1:j-1).*U(1:j-1,j)'))/U(j,j);%递推表达式(1-7)
+                            L(i,j)=(A(i,j)-sum(L(i,1:j-1).*U(1:j-1,j)'))/U(j,j);%递推表达�?(1-7)
                         end
                     end
                 end
@@ -121,7 +121,7 @@ classdef itermodel
             end
         end
         
-        % 迭代法
+        % 迭代�?
         function rou = cal_rou(obj, mode, w)
             if nargin > 2 && mode == 'S'
                 iterMatrix = (obj.D - w*obj.L) \ (( 1- w)*obj.D ...
@@ -133,14 +133,14 @@ classdef itermodel
                     iterMatrix = (obj.D - obj.L) \ obj.U;
               
                 else
-                    disp('请输入J和G,S中的一个！')
+                    disp('请输入J和G,S中的�?个！')
                 end
             end
 
             rou = max( abs(eig(iterMatrix)) );
         end
 
-        % J法
+        % J�?
         function [x, loss] = jacobi_method(obj)
             %% init
             x = zeros(obj.n, 1);
@@ -161,7 +161,7 @@ classdef itermodel
 
                 if norm(x_ - x, 1) < obj.ee
                     disp('J法达到收敛！');
-                    disp('迭代次数：');
+                    disp('迭代次数�?');
                     disp(iter);
                     break;
                 end
@@ -172,7 +172,7 @@ classdef itermodel
         end 
 
         
-        % GS法
+        % GS�?
         function [x, loss] = gs_method(obj)
             %% init
             x = zeros(obj.n, 1);
@@ -192,7 +192,7 @@ classdef itermodel
                 
                 if norm(x_ - x, 1) < obj.ee
                     disp('GS法达到收敛！');
-                    disp('迭代次数：');
+                    disp('迭代次数�?');
                     disp(iter);
                     break;
                 end
@@ -201,7 +201,7 @@ classdef itermodel
             end
         end
         
-        % SOR法
+        % SOR�?
         function [x, loss] = sor_method(obj, w)
             %% init 
             x = zeros(obj.n, 1);
@@ -219,7 +219,7 @@ classdef itermodel
 
                 if norm(x_ - x, 1) < obj.ee
                     disp('SOR法达到收敛！');
-                    disp('迭代次数：');
+                    disp('迭代次数�?');
                     disp(iter);
                     break;
                 end
@@ -235,7 +235,9 @@ classdef itermodel
             lw = 2.5;
             if mod(nargin - 1, 2) == 0
                 if nargin - 1 == 2
-                    plot(1 : maxIter, error1, LineWidth=lw);
+                    % plot(1 : maxIter, error1, LineWidth=lw);
+                    % 2018 can not LineWidth=lw;
+                    plot(1 : maxIter, error1, 'LineWidth', lw);
                     hold on
                     ax = gca;
                     ax.LineWidth = 1.5;
@@ -245,12 +247,13 @@ classdef itermodel
                     set(gca,'GridLineStyle','--')
                     xlabel('迭代次数');
                     ylabel('误差');
-                    title('线性方程组迭代法误差曲线');
+                    title('线�?�方程组迭代法误差曲�?');
                     legend(name1);
                 elseif nargin - 1 == 4
-                    plot(1 : maxIter, error1, LineWidth=lw);
+                    %plot(1 : maxIter, error1, LineWidth=lw);
+                    plot(1 : maxIter, error1, 'LineWidth', lw)
                     hold on
-                    plot(1 : maxIter, error2, LineWidth=lw);
+                    plot(1 : maxIter, error2, 'LineWidth', lw);
                     ax = gca;
                     ax.LineWidth = 1.5;
                     ax.FontName = '微软雅黑';
@@ -259,13 +262,13 @@ classdef itermodel
                     set(gca,'GridLineStyle','--')
                     xlabel('迭代次数');
                     ylabel('误差');
-                    title('线性方程组迭代法误差曲线');
+                    title('线�?�方程组迭代法误差曲�?');
                     legend(name1, name2);
                 elseif nargin - 1 == 6
-                    plot(1 : maxIter, error1, LineWidth=lw);
+                    plot(1 : maxIter, error1, 'LineWidth', lw);
                     hold on
-                    plot(1 : maxIter, error2, LineWidth=lw);
-                    plot(1 : maxIter, error3, LineWidth=lw);
+                    plot(1 : maxIter, error2, 'LineWidth', lw);
+                    plot(1 : maxIter, error3, 'LineWidth', lw);
                     ax = gca;
                     ax.LineWidth = 1.5;
                     ax.FontName = '微软雅黑';
@@ -274,16 +277,16 @@ classdef itermodel
                     set(gca,'GridLineStyle','--')
                     xlabel('迭代次数');
                     ylabel('误差');
-                    title('线性方程组迭代法误差曲线');
+                    title('线�?�方程组迭代法误差曲�?');
                     legend(name1, name2, name3);
                 else
-                    disp('函数输出参数数目为2,4,6')
+                    disp('函数输出参数数目�?2,4,6')
                 end
             else
                 disp('输入函数参数不为偶数!')
             end
            
-            % legend('Jacobi迭代法', 'Gauss-Seidel迭代法', 'SOR迭代法');
+            % legend('Jacobi迭代�?', 'Gauss-Seidel迭代�?', 'SOR迭代�?');
         
         end
     end
